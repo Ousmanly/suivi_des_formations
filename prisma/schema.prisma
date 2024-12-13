@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  fullName String
+  password String
+  role     String
+  status   Boolean
+
+  Module       Module[]
+  Student      Student[]
+  Registration Registration[]
+  Payment      Payment[]
+
+  @@map("users")
+}
+
+model Module {
+  id       Int      @id @default(autoincrement())
+  name     String   @db.VarChar(50)
+  duration DateTime
+  price    Decimal  @db.Decimal(10, 2)
+  status   Boolean
+  userId   Int
+
+  user          User           @relation(fields: [userId], references: [id])
+  registrations Registration[]
+
+  @@map("modules")
+}
+
+model Student {
+  id          Int     @id @default(autoincrement())
+  fullName    String  @db.VarChar(50)
+  phoneNumber String  @db.VarChar(15)
+  email       String  @db.VarChar(100)
+  address     String  @db.VarChar(100)
+  tutor       String? @db.VarChar(50)
+  status      Boolean
+  userId      Int
+
+  user          User           @relation(fields: [userId], references: [id])
+  registrations Registration[]
+  payments      Payment[]
+
+  @@map("students")
+}
+
+model Registration {
+  id           Int      @id @default(autoincrement())
+  studentId    Int
+  moduleId     Int
+  dateRegister DateTime
+  startDate    DateTime
+  endDate      DateTime
+  mount        Decimal  @db.Decimal(10, 2)
+  userId       Int
+
+  student  Student   @relation(fields: [studentId], references: [id])
+  module   Module    @relation(fields: [moduleId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+  payments Payment[]
+
+  @@map("registrations")
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  studentId      Int
+  moduleId       Int
+  registrationId Int
+  paymentDate    DateTime
+  amount         Decimal  @db.Decimal(10, 2)
+  payer          String   @db.VarChar(50)
+  payerNumber    String   @db.VarChar(15)
+  paymentMode    String   @db.VarChar(50)
+  userId         Int
+
+  registration Registration @relation(fields: [registrationId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  Student      Student[]
+
+  @@map("payments")
+}
