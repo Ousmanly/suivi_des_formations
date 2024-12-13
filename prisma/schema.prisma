@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Vous pouvez adapter cela à votre base de données
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id           Int          @id @default(autoincrement())
+  fullName     String       @map("full_name")
+  phoneNumber  String       @map("phone_number")
+  email        String
+  address      String
+  tutor        String?
+  registrations Registration[]
+}
+
+model Module {
+  id       Int           @id @default(autoincrement())
+  name     String
+  duration Int
+  price    Float
+  registrations Registration[]
+}
+
+model Registration {
+  id          Int        @id @default(autoincrement())
+  dateRegister DateTime   @map("date_register")
+  startDate   DateTime    @map("start_date")
+  endDate     DateTime    @map("end_date")
+  amount      Float
+
+  studentId   Int
+  moduleId    Int
+
+  student     Student     @relation(fields: [studentId], references: [id])
+  module      Module      @relation(fields: [moduleId], references: [id])
+  payments    Payment[]
+}
+
+model Payment {
+  id           Int        @id @default(autoincrement())
+  paymentDate  DateTime   @map("payment_date")
+  amount       Float
+  payer        String
+  payerNumber  String      @map("payer_number")
+  paymentMode  String      @map("payment_mode")
+
+  registrationId Int
+  registration   Registration @relation(fields: [registrationId], references: [id])
+}
