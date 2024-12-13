@@ -21,7 +21,7 @@ model Module {
   id       Int           @id @default(autoincrement())
   name     String
   duration Int
-  price    Float
+  price    Decimal   @db.Decimal(10, 2)
   registrations Registration[]
 }
 
@@ -30,7 +30,7 @@ model Registration {
   dateRegister DateTime   @map("date_register")
   startDate   DateTime    @map("start_date")
   endDate     DateTime    @map("end_date")
-  amount      Float
+  amount      Decimal   @db.Decimal(10, 2)
 
   studentId   Int
   moduleId    Int
@@ -43,7 +43,7 @@ model Registration {
 model Payment {
   id           Int        @id @default(autoincrement())
   paymentDate  DateTime   @map("payment_date")
-  amount       Float
+  amount       Decimal   @db.Decimal(10, 2)
   payer        String
   payerNumber  String      @map("payer_number")
   paymentMode  String      @map("payment_mode")

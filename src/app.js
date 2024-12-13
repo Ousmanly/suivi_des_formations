@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import cors from 'cors'
 import express from 'express';
 import studentRouter from './routes/studentRoute.js';
+import moduleRouter from './routes/moduletRoute.js';
 const app = express();
 
 config();
@@ -16,6 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use('/api', studentRouter );
+app.use('/api', moduleRouter );
 app.get('/', (_req, res) => {
   res.send('hello Suivi');
 });
