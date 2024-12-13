@@ -1,7 +1,7 @@
 import StudentService from "../services/StudentService.js";
 
-class StudentController{
-    static async getAllStudents(_req, res) {
+class ModuleController{
+    static async getAllUsers(_req, res) {
         const result = await StudentService.getStudent()
         res.status(201).json(result);
     }
