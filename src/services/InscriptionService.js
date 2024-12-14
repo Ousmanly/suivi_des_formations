@@ -42,9 +42,14 @@ class InscriptionService{
           const module = await prisma.module.findUnique({
               where: { id: moduleId },
           });
+          const student = await prisma.student.findUnique({
+              where: { id: studentId },
+          });
 
           if (!module) {
-              throw new Error("Module introuvable.");
+              throw new Error("Module not found.");
+          }else if (!student) {
+            throw new Error("Student not found.");
           }
 
           const endDate = moment(startDate).add(module.duration, "days").toDate();
@@ -111,34 +116,6 @@ class InscriptionService{
     }
 }
 
-    // static async updateStudent(
-    //     id,
-    //     fullName,
-    //     phoneNumber,
-    //     email,
-    //     address,
-    //     tutor
-    //   ) {
-    //     try {
-    //       const updatedStudent = await prisma.student.update({
-    //         where: {
-    //           id: id,
-    //         },
-    //         data: {
-    //             fullName : fullName,
-    //             phoneNumber :phoneNumber,
-    //             email : email,
-    //             address : address,
-    //             tutor : tutor
-    //         },
-    //       });
-    
-    //       return updatedStudent;
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    // }
-
     static async deleteRegistration(id) {
       try {
           const registration = await prisma.registration.findUnique({
@@ -157,16 +134,5 @@ class InscriptionService{
           throw error;
       }
   }
-  
-    // static async deletStudent(id) {
-    //     try {
-    //       const student = await prisma.student.delete({
-    //         where: { id: id },
-    //       });
-    //       return student;
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    //   }
 }
 export default InscriptionService
