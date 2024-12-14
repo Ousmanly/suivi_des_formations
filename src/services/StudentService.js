@@ -3,6 +3,31 @@ import prisma from "../config/prisma.js"
   
 class StudentService{
 
+    static async checkEmail(email, id = null) {
+        try {
+          if (id) {
+            const student = await prisma.student.findMany({
+              where: {
+                email: email,
+                id: {
+                  not: id,
+                },
+              },
+              select: {
+                id: true,
+                email: true,
+              },
+            });
+            return student
+          } else {
+            const result = await prisma.student.findFirst({ where: { email } });
+            return result ? true : false;
+          }
+        } catch (error) {
+          throw error;
+        }
+      }
+
     static async getStudent() {
         try {
           const students = await prisma.student.findMany();
