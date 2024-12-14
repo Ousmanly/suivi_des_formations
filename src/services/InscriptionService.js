@@ -73,7 +73,7 @@ class InscriptionService{
     }
     
 
-    static async addRegistration(studentId, moduleId, startDate, amount) {
+    static async addRegistration(studentId, moduleId, startDate, amount =  null) {
       try {
           const module = await prisma.module.findUnique({
               where: { id: moduleId },
@@ -90,12 +90,13 @@ class InscriptionService{
 
           const endDate = moment(startDate).add(module.duration, "days").toDate();
         //   const totalAmount = Number(amount) + Number(module.price);
+        const finalAmount = amount !== null ? amount : module.price;
           const newRegistration = await prisma.registration.create({
               data: {
                   dateRegister: new Date(),
                   startDate: new Date(startDate),
                   endDate: endDate,
-                  amount: module.price,
+                  amount: finalAmount,
                   studentId: studentId,
                   moduleId: moduleId,
               },
@@ -141,7 +142,7 @@ class InscriptionService{
             data: {
                 startDate: new Date(startDate),
                 endDate: endDate,
-                amount: module.price,
+                amount: amount,
                 studentId: studentId,
                 moduleId: moduleId,
             },

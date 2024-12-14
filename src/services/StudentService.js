@@ -1,4 +1,5 @@
 import prisma from "../config/prisma.js"
+import { StudentSerializer } from "../serializers/studentSerializer.js";
 
   
 class StudentService{
@@ -6,7 +7,7 @@ class StudentService{
     static async checkEmail(email, id = null) {
         try {
           if (id) {
-            const student = await prisma.student.findMany({
+            const students = await prisma.student.findMany({
               where: {
                 email: email,
                 id: {
@@ -18,7 +19,7 @@ class StudentService{
                 email: true,
               },
             });
-            return student
+            return StudentSerializer.serializerForTable(students)
           } else {
             const result = await prisma.student.findFirst({ where: { email } });
             return result ? true : false;
@@ -27,7 +28,64 @@ class StudentService{
           throw error;
         }
       }
+    static async checkPhoneNumber(phoneNumber, id = null) {
+        try {
+          if (id) {
+            const student = await prisma.student.findMany({
+              where: {
+                phoneNumber: phoneNumber,
+                id: {
+                  not: id,
+                },
+              },
+              select: {
+                id: true,
+                phoneNumber: true,
+              },
+            });
+            return student
+          } else {
+            const result = await prisma.student.findFirst({ where: { phoneNumber } });
+            return result ? true : false;
+          }
+        } catch (error) {
+          throw error;
+        }
+      }
 
+      static async checkStudentById(id) {
+        try {
+          const result = await prisma.student.findFirst({ where: { id } });
+          return result ? true : false;
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      static async checkStudent(phoneNumber, id = null) {
+        try {
+          if (id) {
+            const students = await prisma.student.findMany({
+              where: {
+                phoneNumber: phoneNumber,
+                id: {
+                  not: id,
+                },
+              },
+              select: {
+                id: true,
+                phoneNumber: true,
+              },
+            });
+            return StudentSerializer.serializerForTable(students)
+          } else {
+            const result = await prisma.student.findFirst({ where: { phoneNumber } });
+            return result ? true : false;
+          }
+        } catch (error) {
+          throw error;
+        }
+      }
     static async getStudent() {
         try {
           const students = await prisma.student.findMany();
