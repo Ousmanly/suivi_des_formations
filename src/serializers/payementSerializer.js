@@ -9,6 +9,7 @@ export const PaymentSerializer = {
           payer_number: entity.payerNumber,
           payment_mode: entity.paymentMode,
           registration_id: entity.registration?.id,
+          remainingAmount : entity.remainingAmount,
           student_name: entity.registration?.student?.fullName,
           student_email: entity.registration?.student?.email,
           module_name: entity.registration?.module?.name,

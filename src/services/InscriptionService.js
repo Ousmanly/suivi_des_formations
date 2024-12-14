@@ -28,14 +28,50 @@ class InscriptionService{
     //     }
     //   }
 
+    // static async getRegistrations() {
+    //     try {
+    //       const registrations = await prisma.registration.findMany();
+    //       return registrations;
+    //     } catch (error) {
+    //       throw error;
+    //     }
+    // }
+
+
     static async getRegistrations() {
         try {
-          const registrations = await prisma.registration.findMany();
-          return registrations;
+            const registrations = await prisma.registration.findMany({
+                include: {
+                    payments: {
+                        select: {
+                            amount: true, 
+                        },
+                    },
+                },
+            });
+    
+            const registrationsWithRemainingAmount = registrations.map((registration) => {
+                const totalPaid = registration.payments.reduce((sum, payment) => sum + Number(payment.amount), 0);
+                const remainingAmount = Number(registration.amount) - totalPaid;
+    
+                return {
+                    id: registration.id,
+                    dateRegister: registration.dateRegister,
+                    startDate: registration.startDate,
+                    endDate: registration.endDate,
+                    amount: registration.amount,
+                    studentId: registration.studentId,
+                    moduleId: registration.moduleId,
+                    remainingAmount,
+                };
+            });
+    
+            return registrationsWithRemainingAmount;
         } catch (error) {
-          throw error;
+            throw new Error("Error fetching registrations: " + error.message);
         }
     }
+    
 
     static async addRegistration(studentId, moduleId, startDate, amount) {
       try {
@@ -53,13 +89,13 @@ class InscriptionService{
           }
 
           const endDate = moment(startDate).add(module.duration, "days").toDate();
-
+        //   const totalAmount = Number(amount) + Number(module.price);
           const newRegistration = await prisma.registration.create({
               data: {
                   dateRegister: new Date(),
                   startDate: new Date(startDate),
                   endDate: endDate,
-                  amount: amount,
+                  amount: module.price,
                   studentId: studentId,
                   moduleId: moduleId,
               },
@@ -98,13 +134,14 @@ class InscriptionService{
         }
 
         const endDate = moment(startDate).add(module.duration, "days").toDate();
+        //const totalAmount = Number(module.price);
 
         const updatedRegistration = await prisma.registration.update({
             where: { id },
             data: {
                 startDate: new Date(startDate),
                 endDate: endDate,
-                amount: amount,
+                amount: module.price,
                 studentId: studentId,
                 moduleId: moduleId,
             },

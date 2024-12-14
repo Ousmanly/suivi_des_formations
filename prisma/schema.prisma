@@ -30,7 +30,8 @@ model Registration {
   dateRegister DateTime   @map("date_register")
   startDate   DateTime    @map("start_date")
   endDate     DateTime    @map("end_date")
-  amount      Decimal   @db.Decimal(10, 2)
+  amount      Decimal?   @db.Decimal(10, 2)
+  remainingAmount Decimal   @default(0) @db.Decimal(10, 2) 
 
   studentId   Int
   moduleId    Int
@@ -47,6 +48,7 @@ model Payment {
   payer        String
   payerNumber  String      @map("payer_number")
   paymentMode  String      @map("payment_mode")
+  remainingAmount Decimal?  @db.Decimal(10, 2) 
 
   registrationId Int
   registration   Registration @relation(fields: [registrationId], references: [id])
