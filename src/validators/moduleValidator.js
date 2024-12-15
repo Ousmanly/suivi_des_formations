@@ -87,33 +87,7 @@ const updateModuleValidatore = [
     next();
   },
 ];
-// const deleteStudentValidatore = [
-//   check('id')
-//     .not()
-//     .isEmpty()
-//     .withMessage('Id is required!')
-//     .bail()
-//     .isInt()
-//     .withMessage('Id must be a number!')
-//     .bail()
-//     .custom(async (value) => {
-//       const id = parseInt(value);
-//       const idExists = await StudentService.checkStudentById(id);
-//       if (!idExists) {
-//         throw new Error('Student not found!');
-//       }
-//       return true;
-//     })
-//     .bail(),
-//   (req, res, next) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty())
-//       return res
-//         .status(StatusCodes.UNPROCESSABLE_ENTITY)
-//         .json({ errors: errors.array() });
-//     next();
-//   },
-// ];
+
 
 export {
     addRequestModuleValidator,

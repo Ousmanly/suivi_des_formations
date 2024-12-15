@@ -3,39 +3,6 @@ import prisma from "../config/prisma.js"
   
 class InscriptionService{
 
-    // static async checkEmail(email, id = null) {
-    //     try {
-    //       if (id) {
-    //         const student = await prisma.student.findMany({
-    //           where: {
-    //             email: email,
-    //             id: {
-    //               not: id,
-    //             },
-    //           },
-    //           select: {
-    //             id: true,
-    //             email: true,
-    //           },
-    //         });
-    //         return student
-    //       } else {
-    //         const result = await prisma.student.findFirst({ where: { email } });
-    //         return result ? true : false;
-    //       }
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    //   }
-
-    // static async getRegistrations() {
-    //     try {
-    //       const registrations = await prisma.registration.findMany();
-    //       return registrations;
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    // }
 
 
     static async getRegistrations() {
@@ -153,6 +120,14 @@ class InscriptionService{
         throw error;
     }
 }
+static async checkInscriptionById(id) {
+    try {
+      const result = await prisma.registration.findFirst({ where: { id } });
+      return result ? true : false;
+    } catch (error) {
+      throw error;
+    }
+  }
 
     static async deleteRegistration(id) {
       try {

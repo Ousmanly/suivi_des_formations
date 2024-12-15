@@ -4,31 +4,6 @@ import { PaymentSerializer } from "../serializers/payementSerializer.js";
 
 class PayementService {
 
-     // static async checkEmail(email, id = null) {
-    //     try {
-    //       if (id) {
-    //         const student = await prisma.student.findMany({
-    //           where: {
-    //             email: email,
-    //             id: {
-    //               not: id,
-    //             },
-    //           },
-    //           select: {
-    //             id: true,
-    //             email: true,
-    //           },
-    //         });
-    //         return student
-    //       } else {
-    //         const result = await prisma.student.findFirst({ where: { email } });
-    //         return result ? true : false;
-    //       }
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    //   }
-
     static async getPayments() {
         try {
             const payments = await prisma.payment.findMany({
@@ -77,33 +52,7 @@ class PayementService {
           throw error;
         }
       }
-    // static async addPayement(registrationId, paymentDate, amount, payer, payerNumber, paymentMode ) {
-    //     try {
-    //         const registration = await prisma.registration.findUnique({
-    //             where: { id: registrationId },
-    //         });
-  
-    //         if (!registration) {
-    //             throw new Error("Registration not found.");
-    //         }
-  
-    //         const newPayment = await prisma.payment.create({
-    //             data: {
-    //                 paymentDate: new Date(paymentDate).toISOString(),
-    //                 amount: amount,
-    //                 payer: payer,
-    //                 payerNumber: payerNumber,
-    //                 paymentMode: paymentMode,
-    //                 registrationId: registrationId,
-    //             },
-    //         });
-  
-    //         return newPayment;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
-
+    
     static async addPayement(registrationId, paymentDate, amount, payer, payerNumber, paymentMode) {
         try {
             const registration = await prisma.registration.findUnique({
@@ -139,74 +88,27 @@ class PayementService {
         }
     }
     
-
-    // static async updatePayment(id, paymentDate, amount, payer, payerNumber, paymentMode, registrationId) {
-    //     try {
-    //         const payement = await prisma.payment.findUnique({
-    //             where: { id },
-    //         });
-    
-    //         if (!payement) {
-    //             throw new Error("Payment not found");
-    //         }
-    
-    //         const registration = await prisma.registration.findUnique({
-    //             where: { id: registrationId },
-    //             include: { payments: true },
-    //         });
-    
-    //         if (!registration) {
-    //             throw new Error("Registration not found");
-    //         }
-            
-    //         const totalPaid = registration.payments
-    //         .filter((p) => p.id !== id) 
-    //         .reduce((sum, p) => sum + Number(p.amount), 0);
-
-    //         if (totalPaid + Number(amount) > Number(registration.amount)) {
-    //             throw new Error("Updated payment exceeds the total amount due.");
-    //         }
-
-    //         const remainingAmount = Number(registration.amount) - (totalPaid + Number(amount));
-
-    //         const updatedPayment = await prisma.payment.update({
-    //             where: { id },
-    //             data: {
-    //                 paymentDate: new Date(paymentDate).toISOString(),
-    //                 amount: amount,
-    //                 payer: payer,
-    //                 payerNumber: payerNumber,
-    //                 paymentMode: paymentMode,
-    //                 registrationId: registrationId,
-    //                 remainingAmount: remainingAmount
-    //             },
-    //         });
-    
-    //         return updatedPayment;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
-
-    // static async deletePayment(id) {
-    //     try {
-    //         const payement = await prisma.payment.findUnique({
-    //             where: { id },
-    //         });
-    
-    //         if (!payement) {
-    //             throw new Error("Payment not found");
-    //         }
-    //         await prisma.payment.delete({
-    //             where: { id },
-    //         });
-    
-    //         return true;
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
-
+    static async checkIfPaymentExceedsTotal(registrationId, amount) {
+        try {
+          const registration = await prisma.registration.findUnique({
+            where: { id: registrationId },
+            include: { payments: true },
+          });
+      
+          if (!registration) {
+            throw new Error('Registration not found.');
+          }
+      
+          const totalPaid = registration.payments.reduce(
+            (sum, payment) => sum + Number(payment.amount),
+            0
+          );
+      
+          return totalPaid + Number(amount) > Number(registration.amount);
+        } catch (error) {
+        }
+      }
+     
 
     static async deletePayment(id) {
         try {
