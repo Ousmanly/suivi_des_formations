@@ -11,7 +11,14 @@ class ModuleService {
       throw error;
     }
   }
-
+  static async checkModuleById(id) {
+    try {
+      const result = await prisma.module.findFirst({ where: { id } });
+      return result ? true : false;
+    } catch (error) {
+      throw error;
+    }
+  }
   static async createModule(
     name,
     duration,

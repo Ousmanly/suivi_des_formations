@@ -25,31 +25,6 @@ class PayementController{
         }
     }
 
-    static async updatePayment(req, res, next) {
-        const { id } = req.params;
-        const { paymentDate, amount, payer, payerNumber, paymentMode, registrationId } = req.body;
-    
-        try {
-            const updatedPayment = await PayementService.updatePayment(
-                parseInt(id),
-                paymentDate,
-                amount,
-                payer,
-                payerNumber,
-                paymentMode,
-                parseInt(registrationId),
-            );
-    
-            res.status(200).json({
-                message: "Payment has been updated",
-                payment: updatedPayment,
-            });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-            next(error);
-        }
-    }
-
     static async deletePayment(req, res, next) {
         const { id } = req.params; 
         try {

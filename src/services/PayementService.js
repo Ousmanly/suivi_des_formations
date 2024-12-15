@@ -69,6 +69,14 @@ class PayementService {
         }
     }
 
+    static async checkPaymentById(id) {
+        try {
+          const result = await prisma.payment.findFirst({ where: { id } });
+          return result ? true : false;
+        } catch (error) {
+          throw error;
+        }
+      }
     // static async addPayement(registrationId, paymentDate, amount, payer, payerNumber, paymentMode ) {
     //     try {
     //         const registration = await prisma.registration.findUnique({
