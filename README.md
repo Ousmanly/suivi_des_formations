@@ -55,3 +55,7 @@ npm start
 ```
 
 ## Auteur
+
+[Assa Baradji](https://github.com/AssaBaradji)
+[Ousmane Ly](https://github.com/OusmaneLy)
+[Zuber Ba](https://github.com/ZuberBa)
