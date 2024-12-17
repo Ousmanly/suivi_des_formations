@@ -14,6 +14,19 @@ class InscriptionService{
                             amount: true, 
                         },
                     },
+                    student: {
+                        select: {
+                            id: true,
+                            fullName: true, 
+                            email: true, 
+                        },
+                    },
+                    module: {
+                        select: {
+                            id: true,
+                            name: true,  
+                        },
+                    },
                 },
             });
     
@@ -29,6 +42,8 @@ class InscriptionService{
                     amount: registration.amount,
                     studentId: registration.studentId,
                     moduleId: registration.moduleId,
+                    studentName: registration.student.fullName, // Récupération du nom de l'étudiant
+                    moduleName: registration.module.name,
                     remainingAmount,
                 };
             });

@@ -23,7 +23,7 @@ const addRequestStudentValidator = [
     .withMessage('Phone number is required!')
     .bail()
     .isLength({ min: 11 })
-    .withMessage('Name must be at least 15 characters long!')
+    .withMessage('Name must be at least 11 characters long!')
     .isLength({ max: 15 })
     .withMessage('Name must be maximum of 15 characters long!')
     .bail()

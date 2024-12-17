@@ -58,7 +58,7 @@ const addRequestPaymentValidator = [
     .withMessage('Phone number is required!')
     .bail()
     .isLength({ min: 11 })
-    .withMessage('Phone number must be at least 15 characters long!')
+    .withMessage('Phone number must be at least 11 characters long!')
     .isLength({ max: 15 })
     .withMessage('Phone number must be maximum of 15 characters long!')
     .bail(),
