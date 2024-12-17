@@ -375,35 +375,6 @@
 					"response": []
 				},
 				{
-					"name": "updatePayement",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"paymentDate\": \"2024-01-01T00:00:00.000Z\",\r\n    \"amount\": \"400\",\r\n    \"payer\": \"Amadou Ba\",\r\n    \"payerNumber\": \"47 45 54 67\",\r\n    \"paymentMode\": \"Carte\",\r\n    \"registrationId\": 3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3005/api/payements",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3005",
-							"path": [
-								"api",
-								"payements"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "deletePayement",
 					"request": {
 						"method": "DELETE",
