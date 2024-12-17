@@ -3,39 +3,6 @@ import prisma from "../config/prisma.js"
   
 class InscriptionService{
 
-    // static async checkEmail(email, id = null) {
-    //     try {
-    //       if (id) {
-    //         const student = await prisma.student.findMany({
-    //           where: {
-    //             email: email,
-    //             id: {
-    //               not: id,
-    //             },
-    //           },
-    //           select: {
-    //             id: true,
-    //             email: true,
-    //           },
-    //         });
-    //         return student
-    //       } else {
-    //         const result = await prisma.student.findFirst({ where: { email } });
-    //         return result ? true : false;
-    //       }
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    //   }
-
-    // static async getRegistrations() {
-    //     try {
-    //       const registrations = await prisma.registration.findMany();
-    //       return registrations;
-    //     } catch (error) {
-    //       throw error;
-    //     }
-    // }
 
 
     static async getRegistrations() {
@@ -45,6 +12,19 @@ class InscriptionService{
                     payments: {
                         select: {
                             amount: true, 
+                        },
+                    },
+                    student: {
+                        select: {
+                            id: true,
+                            fullName: true, 
+                            email: true, 
+                        },
+                    },
+                    module: {
+                        select: {
+                            id: true,
+                            name: true,  
                         },
                     },
                 },
@@ -62,6 +42,8 @@ class InscriptionService{
                     amount: registration.amount,
                     studentId: registration.studentId,
                     moduleId: registration.moduleId,
+                    studentName: registration.student.fullName, // Récupération du nom de l'étudiant
+                    moduleName: registration.module.name,
                     remainingAmount,
                 };
             });
@@ -153,6 +135,14 @@ class InscriptionService{
         throw error;
     }
 }
+static async checkInscriptionById(id) {
+    try {
+      const result = await prisma.registration.findFirst({ where: { id } });
+      return result ? true : false;
+    } catch (error) {
+      throw error;
+    }
+  }
 
     static async deleteRegistration(id) {
       try {
